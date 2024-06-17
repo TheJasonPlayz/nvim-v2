@@ -2,25 +2,26 @@
 	Use `opts = {}` to force a plugin to be loaded.
     This is equivalent to:
     require('Comment').setup({})
-]] --
+]]
+--
 return {
-	'tpope/vim-sleuth',
+	"tpope/vim-sleuth",
 	{
-		'folke/which-key.nvim',
+		"folke/which-key.nvim",
 		-- Sets loading event to 'VimEnter'
-		event = 'VimEnter',
+		event = "VimEnter",
 		config = function()
 			require("which-key").setup()
 			require("plugin-confs.whichkey")
-		end
+		end,
 	},
 
 	{
-		'nvim-telescope/telescope.nvim',
-		event = 'VimEnter',
-		branch = '0.1.x',
+		"nvim-telescope/telescope.nvim",
+		event = "VimEnter",
+		branch = "0.1.x",
 		dependencies = {
-			'nvim-lua/plenary.nvim',
+			"nvim-lua/plenary.nvim",
 			--[[{
 				'nvim-telescope/telescope-fzf-native.nvim',
 
@@ -33,15 +34,19 @@ return {
 				cond = function()
 				  return vim.fn.executable 'make' == 1
 				end,
-			},]] --
-			{ 'nvim-telescope/telescope-ui-select.nvim' },
+			},]]
+			--
+			{ "nvim-telescope/telescope-ui-select.nvim" },
 
-			{ 'nvim-tree/nvim-web-devicons',            enabled = vim.g.have_nerd_font },
-			{ 'nvim-telescope/telescope-project.nvim',  dependencies = { 'nvim-telescope/telescope-file-browser.nvim' } }
+			{ "nvim-tree/nvim-web-devicons", enabled = vim.g.have_nerd_font },
+			{
+				"nvim-telescope/telescope-project.nvim",
+				dependencies = { "nvim-telescope/telescope-file-browser.nvim" },
+			},
 		},
 		config = function()
 			require("plugin-confs.telescope")
-		end
+		end,
 	},
 
 	{
@@ -52,21 +57,21 @@ return {
 			"hrsh7th/cmp-path",
 			"L3MON4D3/LuaSnip",
 			"saadparwaiz1/cmp_luasnip",
-			"rafamadriz/friendly-snippets"
+			"rafamadriz/friendly-snippets",
 		},
 		config = function()
 			require("plugin-confs.cmp")
-		end
+		end,
 	},
 
 	{
 		"williamboman/mason.nvim",
 		dependencies = {
-			"williamboman/mason-lspconfig.nvim"
+			"williamboman/mason-lspconfig.nvim",
 		},
 		config = function()
 			require("plugin-confs.mason")
-		end
+		end,
 	},
 
 	{
@@ -75,24 +80,24 @@ return {
 		dependencies = {
 			"hrsh7th/cmp-nvim-lsp",
 			{ "antosha417/nvim-lsp-file-operations", config = true },
-			{ "folke/neodev.nvim",                   opts = {} }
+			{ "folke/neodev.nvim", opts = {} },
 		},
 		config = function()
 			require("plugin-confs.lspconfig")
-		end
+		end,
 	},
 
 	{
-		'stevearc/conform.nvim',
+		"stevearc/conform.nvim",
 		lazy = false,
 		keys = {
 			{
-				'<leader>f',
+				"<leader>f",
 				function()
-					require('conform').format { async = true, lsp_fallback = true }
+					require("conform").format({ async = true, lsp_fallback = true })
 				end,
-				mode = '',
-				desc = '[F]ormat buffer',
+				mode = "",
+				desc = "[F]ormat buffer",
 			},
 		},
 		opts = {
@@ -105,49 +110,78 @@ return {
 				}
 			end,
 			formatters_by_ft = {
-				lua = { 'stylua' },
+				lua = { "stylua" },
 			},
 		},
 	},
 
 	{
-		'folke/tokyonight.nvim',
+		"folke/tokyonight.nvim",
 		priority = 1000,
 		init = function()
 			-- Load the colorscheme here.
-			vim.cmd.colorscheme 'tokyonight-night'
-		end,
-	},
-
-	{ 'folke/todo-comments.nvim', event = 'VimEnter', dependencies = { 'nvim-lua/plenary.nvim' }, opts = { signs = false } },
-
-	{ -- Highlight, edit, and navigate code
-		'nvim-treesitter/nvim-treesitter',
-		build = ':TSUpdate',
-		opts = {
-			ensure_installed = { 'lua', 'luadoc', "python", "markdown" },
-			auto_install = true,
-			highlight = {
-				enable = true,
-				--  If you are experiencing weird indenting issues, add the language to
-				--  the list of additional_vim_regex_highlighting and disabled languages for indent.
-				additional_vim_regex_highlighting = { 'ruby' },
-			},
-			indent = { enable = true, disable = { 'ruby' } },
-		},
-		config = function(_, opts)
-			-- Prefer git instead of curl in order to improve connectivity in some environments
-			require('nvim-treesitter.install').prefer_git = true
-			---@diagnostic disable-next-line: missing-fields
-			require('nvim-treesitter.configs').setup(opts)
+			vim.cmd.colorscheme("tokyonight-night")
 		end,
 	},
 
 	{
-		'windwp/nvim-autopairs',
+		"folke/todo-comments.nvim",
+		event = "VimEnter",
+		dependencies = { "nvim-lua/plenary.nvim" },
+		opts = { signs = false },
+	},
+
+	{ -- Highlight, edit, and navigate code
+		"nvim-treesitter/nvim-treesitter",
+		build = ":TSUpdate",
+		opts = {
+			ensure_installed = { "lua", "luadoc", "python", "markdown" },
+			auto_install = true,
+			highlight = { enable = true },
+			indent = { enable = true },
+			incremental_selection = {
+				enable = true,
+				keymaps = {
+					init_selection = "<c-space>",
+					node_incremental = "<c-space>",
+					scope_incremental = "<c-s>",
+					node_decremental = "<M-space>",
+				},
+			},
+		},
+		config = function(_, opts)
+			-- Prefer git instead of curl in order to improve connectivity in some environments
+			require("nvim-treesitter.install").prefer_git = true
+			---@diagnostic disable-next-line: missing-fields
+			require("nvim-treesitter.configs").setup(opts)
+		end,
+	},
+
+	{
+		"windwp/nvim-autopairs",
 		event = "InsertEnter",
-		config = true
+		config = true,
 		-- use opts = {} for passing setup options
 		-- this is equalent to setup({}) function
+	},
+
+	{
+		-- amongst your other plugins
+		{ "akinsho/toggleterm.nvim", version = "*", config = true },
+	},
+
+	{
+		"mfussenegger/nvim-dap",
+		config = function()
+			require("plugin-confs.dap")
+		end,
+		dependencies = {
+			{
+				"mfussenegger/nvim-dap-python",
+				config = function()
+					require("dap-python").setup("python")
+				end,
+			},
+		},
 	},
 }
